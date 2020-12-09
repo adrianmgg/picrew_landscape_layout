@@ -8,10 +8,6 @@ requires a userstyle manager such as Stylus ([Chrome](https://chrome.google.com/
 
 (example screenshots are of [this](https://picrew.me/image_maker/100365) picrew.)
 
-#### before
-
-![before](https://github.com/adrianmgg/picrew_landscape_layout/raw/main/picrew.me_image_maker_100365.png)
-
-#### after
-
-![after](https://raw.githubusercontent.com/adrianmgg/picrew_landscape_layout/main/picrew.me_image_maker_100365%20(4).png)
+before | after
+-|-
+![before](https://github.com/adrianmgg/picrew_landscape_layout/raw/main/picrew.me_image_maker_100365.png)|![after](https://raw.githubusercontent.com/adrianmgg/picrew_landscape_layout/main/picrew.me_image_maker_100365%20(4).png)

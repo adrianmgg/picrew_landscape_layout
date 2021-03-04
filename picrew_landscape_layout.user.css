@@ -4,6 +4,8 @@
 @version        1.0.0
 @description    rearranges & adjusts picrew image maker to fit better on a landscape window
 @author         amgg
+@preprocessor   stylus
+@var checkbox pixelatedCanvas "Pixelated Canvas Rendering" 0
 ==/UserStyle== */
 @-moz-document regexp("^(https?://)?(www\\.)?picrew\\.me/image_maker/\\d+$") {
 	:root {
@@ -14,7 +16,7 @@
 		--__canvas_scale_factor: 8;
 	}
 
-	/* canvas */
+	/* canvas wrapper */
 	.imagemaker_canvas_wrapper {
 		position: fixed !important;
 		left: 0px !important;
@@ -28,6 +30,13 @@
 
 	.imagemaker_container {
 		overflow: visible !important;
+	}
+	
+	/* canvas */
+	canvas#my-canvas-object {
+		if pixelatedCanvas {
+			image-rendering: pixelated;
+		}
 	}
 
 	/* canvas buttons */

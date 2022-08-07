@@ -1,95 +1,104 @@
 /* ==UserStyle==
 @name           picrew landscape layout
 @namespace      github.com/adrianmgg/picrew_landscape_layout
-@version        1.4.0
+@version        1.5.0
 @description    rearranges & adjusts picrew image maker to fit better on a landscape window
 @author         amgg
-@preprocessor   stylus
+@preprocessor   less
 @var checkbox pixelatedCanvas "Pixelated Canvas Rendering" 0
 @var checkbox spaceForAd "Leave space for ads" 0
+@var range controlsMinWidth "Controls Panel Minimum Width (as % of screen width) (resize window after adjusting)" [30, 5, 95, 1, "vw"]
 ==/UserStyle== */
 @-moz-document regexp("^(https?://)?(www\\.)?picrew\\.me/image_maker/\\d+/?$") {
-	:root {
-		if(spaceForAd) {
-			--__height: calc(100vh - 106px);
+	/* if it's a portrait window just let picrew handle it */
+	@media /*(min-aspect-ratio: 10/15)*/ (min-width: 0px) {
+		:root {
+			& when (@spaceForAd = 1) {
+				--__height: calc(100vh - 106px);
+			}
+			& when (@spaceForAd = 0) {
+				--__height: 100vh;
+			}
+			--__canvas_desired_width: var(--__height);
+			--__controls_min_width: @controlsMinWidth;
+			--__controls_width: ~"max(calc(100vw - var(--__canvas_desired_width)), var(--__controls_min_width))";
+			--__canvas_width: calc(100vw - var(--__controls_width));
+			--__canvas_scale_factor: 8;
 		}
-		else {
-			--__height: 100vh;
+
+		/* canvas wrapper */
+		.imagemaker_canvas_wrapper {
+			position: fixed !important;
+			left: 0px !important;
+			max-height: unset !important;
+			max-width: unset !important;
+			height: calc(var(--__height) / var(--__canvas_scale_factor)) !important;
+			width: calc(var(--__canvas_width) / var(--__canvas_scale_factor)) !important;
+			transform-origin: top left;
+			transform: scale(var(--__canvas_scale_factor));
 		}
-		--__canvas_desired_width: var(--__height);
-		--__controls_min_width: 400px;
-		--__controls_width: max(calc(100vw - var(--__canvas_desired_width)), var(--__controls_min_width));
-		--__canvas_width: calc(100vw - var(--__controls_width));
-		--__canvas_scale_factor: 8;
+
+		.imagemaker_container {
+			overflow: visible !important;
+		}
+
+		/* canvas buttons */
+		.imagemaker_complete_btn {
+			left: 0px !important;
+			bottom: 0px !important;
+			transform: scale(calc(1 / var(--__canvas_scale_factor))) translate(4px, -4px) !important;
+			transform-origin: bottom left !important;
+		}
+
+		.imagemaker_ctrl_btns {
+			right: 0px !important;
+			bottom: 0px !important;
+			transform: scale(calc(1 / var(--__canvas_scale_factor))) translate(-4px, -4px) !important;
+			transform-origin: bottom right !important;
+		}
+
+		/* logo */
+		.imagemaker_picrew_logo {
+			position: fixed !important;
+			top: unset !important;
+			left: unset !important;
+			bottom: 4px !important;
+			right: 4px !important;
+		}
+
+		/* controls wrapper */
+		.play-Container_Imagemaker {
+			position: fixed !important;
+			width: var(--__controls_width) !important;
+			height: var(--__height) !important;
+			right: 0px !important;
+			top: 0px !important;
+		}
+
+		.imagemaker_parts_menu ul li {
+			width: unset !important;
+			margin-left: 6px !important;
+			margin-right: 6px !important;
+		}
+
+		.imagemaker_parts_menu ul li:first-child {
+			margin-left: 12px !important;
+		}
+
+		.imagemaker_parts_menu ul li:last-child {
+			margin-right: 64px !important;
+		}
 	}
 
-	/* canvas wrapper */
-	.imagemaker_canvas_wrapper {
-		position: fixed !important;
-		left: 0px !important;
-		max-height: unset !important;
-		max-width: unset !important;
-		height: calc(var(--__height) / var(--__canvas_scale_factor)) !important;
-		width: calc(var(--__canvas_width) / var(--__canvas_scale_factor)) !important;
-		transform-origin: top left;
-		transform: scale(var(--__canvas_scale_factor));
-	}
-
-	.imagemaker_container {
-		overflow: visible !important;
-	}
-	
 	/* canvas */
-	canvas#my-canvas-object {
-		if pixelatedCanvas {
+	#my-canvas-object canvas {
+		& when (@pixelatedCanvas = 1) {
 			image-rendering: pixelated;
 		}
 	}
 
-	/* canvas buttons */
-	.imagemaker_complete_btn {
-		left: 0px !important;
-		bottom: 0px !important;
-		transform: scale(calc(1 / var(--__canvas_scale_factor))) translate(4px, -4px) !important;
-		transform-origin: bottom left !important;
-	}
-
-	.imagemaker_ctrl_btns {
-		right: 0px !important;
-		bottom: 0px !important;
-		transform: scale(calc(1 / var(--__canvas_scale_factor))) translate(-4px, -4px) !important;
-		transform-origin: bottom right !important;
-	}
-	
-	/* logo */
-	.imagemaker_picrew_logo {
-		position: fixed !important;
-		top: unset !important;
-		left: unset !important;
-		bottom: 4px !important;
-		right: 4px !important;
-	}
-	
-	/* controls wrapper */
-	.play-Container_Imagemaker {
-		position: fixed !important;
-		width: var(--__controls_width) !important;
-		height: var(--__height) !important;
-		right: 0px !important;
-		top: 0px !important;
-	}
-
-	.imagemaker_parts_menu ul li {
-		width: unset !important;
-		margin-left: 6px !important;
-		margin-right: 6px !important;
-	}
-
-	.imagemaker_parts_menu ul li:first-child {
-		margin-left: 12px !important;
-	}
-
-	.imagemaker_parts_menu ul li:last-child {
-		margin-right: 64px !important;
+	/* hide "please turn your phone vertically to play" thing that covers screen */
+	.landscape_info {
+		display: none;
 	}
 }

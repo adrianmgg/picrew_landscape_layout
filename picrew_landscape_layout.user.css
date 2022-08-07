@@ -11,7 +11,7 @@
 ==/UserStyle== */
 @-moz-document regexp("^(https?://)?(www\\.)?picrew\\.me/image_maker/\\d+/?$") {
 	/* if it's a portrait window just let picrew handle it */
-	@media /*(min-aspect-ratio: 10/15)*/ (min-width: 0px) {
+	@media (min-aspect-ratio: 10/10){
 		:root {
 			& when (@spaceForAd = 1) {
 				--__height: calc(100vh - 106px);

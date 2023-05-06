@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           picrew landscape layout
 @namespace      github.com/adrianmgg/picrew_landscape_layout
-@version        1.5.0
+@version        1.5.1
 @description    rearranges & adjusts picrew image maker to fit better on a landscape window
 @author         amgg
 @preprocessor   less
@@ -9,7 +9,7 @@
 @var checkbox spaceForAd "Leave space for ads" 0
 @var range controlsMinWidth "Controls Panel Minimum Width (as % of screen width) (resize window after adjusting)" [30, 5, 95, 1, "vw"]
 ==/UserStyle== */
-@-moz-document regexp("^(https?://)?(www\\.)?picrew\\.me/image_maker/\\d+/?$") {
+@-moz-document regexp("^(https?://)?(www\\.)?picrew\\.me/(\\w{2}/)?image_maker/\\d+/?$") {
 	/* if it's a portrait window just let picrew handle it */
 	@media (min-aspect-ratio: 10/10){
 		:root {

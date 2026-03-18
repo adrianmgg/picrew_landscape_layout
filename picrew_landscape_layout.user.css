@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           picrew landscape layout
 @namespace      github.com/adrianmgg/picrew_landscape_layout
-@version        1.5.3
+@version        1.6.0
 @description    rearranges & adjusts picrew image maker to fit better on a landscape window
 @author         amgg
 @preprocessor   less
@@ -26,9 +26,13 @@
 			--__canvas_width: calc(100vw - var(--__controls_width));
 			--__canvas_scale_factor: 8;
 		}
+        
+        .play-Container_Left, .play-Container_Right {
+            display: none;
+        }
 
 		/* canvas wrapper */
-		.imagemaker_canvas_wrapper {
+		.canvas-container {
 			position: fixed !important;
 			left: 0px !important;
 			max-height: unset !important;
@@ -39,47 +43,67 @@
 			transform: scale(var(--__canvas_scale_factor));
 		}
 
-		.imagemaker_container {
+        /* other elements that need their w/h hardcoded too */
+        /* (repeated in order to increase specificity so our selector will win) */
+        .image-maker-canvas-wrapper > .konvajs-content.konvajs-content.konvajs-content.konvajs-content.konvajs-content.konvajs-content
+        {
+            // height: calc(var(--__height) / var(--__canvas_scale_factor)) !important;
+			// width: calc(var(--__canvas_width) / var(--__canvas_scale_factor)) !important;
+            --__canvas_elem_wh_min: min(
+                calc(var(--__height) / var(--__canvas_scale_factor)),
+                calc(var(--__canvas_width) / var(--__canvas_scale_factor)),
+            );
+        }
+        .image-maker-canvas-wrapper > .konvajs-content.konvajs-content.konvajs-content.konvajs-content.konvajs-content.konvajs-content > canvas {
+            height: var(--__canvas_elem_wh_min) !important;
+            width: var(--__canvas_elem_wh_min) !important;
+        }
+
+		/* .image-maker-canvas-container {
 			overflow: visible !important;
-		}
+		} */
 
 		/* canvas buttons */
-        .corner-button(@verti, @horiz) {
+        .corner-button(@verti, @horiz, @hoffset, @voffset) {
             /* make sure the other ones are unset */
             each(~(left, right), { @{value}: if(@horiz = @value, 0px, unset) !important; });
             each(~(top, bottom), { @{value}: if(@verti = @value, 0px, unset) !important; });
             @horiz-dir: if(@horiz = right,  -1, 1);
             @verti-dir:  if(@verti = bottom, -1, 1);
-            transform: scale(calc(1 / var(--__canvas_scale_factor))) translate((4px * @horiz-dir), (4px * @verti-dir)) !important;
+            transform: scale(calc(1 / var(--__canvas_scale_factor))) translate((4px * @horiz-dir + @hoffset), (4px * @verti-dir + @voffset)) !important;
             transform-origin: @horiz @verti !important;
         }
-        .imagemaker_canvas_wrapper > {
-            .imagemaker_complete_btn {
-                .corner-button(bottom, left);
+        .canvas-buttons-container {
+            .complete-button {
+                .corner-button(bottom, left, 0px, 0px);
             }
-            .imagemaker_ctrl_btns {
-                .corner-button(bottom, right);
+            .save-button {
+                .corner-button(bottom, left, 0px, -55px);
+                & when (@hideKeepButton = 1) { display: none; }
+            }
+            .control-button {
+                .corner-button(bottom, right, 0px, 0px);
             }
             .bookmark-icon {
-                .corner-button(top, left);
+                .corner-button(top, left, 0px, 0px);
             }
-            .imagemaker_save_btn {
-                .corner-button(top, right);
-                & when (@hideKeepButton = 1) { display: none; }
+            .info-toggle-button {
+                .corner-button(top, right, 0px, 0px);
             }
         }
 
 		/* logo */
-		.imagemaker_picrew_logo {
-			position: fixed !important;
+		.picrew-logo {
+			/* position: fixed !important;
 			top: unset !important;
 			left: unset !important;
 			bottom: 4px !important;
-			right: 4px !important;
+			right: 4px !important; */
+            display: none;
 		}
 
 		/* controls wrapper */
-		.play-Container_Imagemaker {
+		.controller-container {
 			position: fixed !important;
 			width: var(--__controls_width) !important;
 			height: var(--__height) !important;
